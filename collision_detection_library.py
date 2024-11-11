@@ -2,14 +2,24 @@ import open3d as o3d
 import numpy as np
 import os
 
+# global configuration
+cfg_voxel_size = 2  # voxel downsample
+cfg_roi_max_distance = 200.0 # mm, remove points further than this
+cfg_outlier_removal_radius = 4 # radius outlier removal
+cfg_outlier_removal_min_neighbors = 20 # radius outlier removal
+cfg_dbscan_epsilon = 3 # dbscan 
+cfg_dbscan_min_neighbouring_pts = 15
+
+cfg_bounding_box_size_threshold = 0
+
 # returns a filtered pcd after voxel downsampling and 
 def preprocessing(pcd):
     # Voxel downsampling
-    voxel_size = 2  # Set the voxel size (e.g., 5 mm)
+    voxel_size = cfg_voxel_size  # Set the voxel size (e.g., 5 mm)
     pcd = pcd.voxel_down_sample(voxel_size=voxel_size)
 
     # Set maximum distance threshold
-    max_distance = 200.0  # replace with your desired threshold
+    max_distance = cfg_roi_max_distance  # replace with your desired threshold
 
     # Convert point cloud to numpy array for filtering
     points = np.asarray(pcd.points)
@@ -24,8 +34,8 @@ def preprocessing(pcd):
 
     # Radius outlier removal
     # Set parameters: radius to consider neighbors and minimum number of neighbors within that radius
-    radius = 4   # Replace with your desired radius
-    min_neighbors = 20  # Minimum neighbors within radius to consider a point as inlier
+    radius = cfg_outlier_removal_radius   # Replace with your desired radius
+    min_neighbors = cfg_outlier_removal_min_neighbors  # Minimum neighbors within radius to consider a point as inlier
 
     filtered_pcd, ind = filtered_pcd.remove_radius_outlier(nb_points=min_neighbors, radius=radius)
 
@@ -46,8 +56,8 @@ def clustering(pcd, cluster_folder="clusters", logging=False):
     print(points.shape)
 
     # DBSCAN parameters
-    epsilon = 3  # Maximum distance between points in the same cluster
-    min_points = 15  # Minimum number of points to form a cluster
+    epsilon = cfg_dbscan_epsilon  # Maximum distance between points in the same cluster
+    min_points = cfg_dbscan_min_neighbouring_pts  # Minimum number of points to form a cluster
 
     # Perform DBSCAN clustering using Open3D
     labels = np.array(pcd.cluster_dbscan(eps=epsilon, min_points=min_points, print_progress=True))
@@ -121,3 +131,14 @@ def distance_calc(pcd1, pcd2):
     min_distance = min(distances)
     print(f"The closest distance between the two point clouds is: {min_distance}")
     return min_distance
+
+def boundbox_size_calc(pcd):
+    # Calculate the axis-aligned bounding box
+    aabb = pcd.get_axis_aligned_bounding_box()
+    aabb_volume = aabb.volume()
+    print(f"Axis-Aligned Bounding Box Volume: {aabb_volume}")
+
+    # Calculate the oriented bounding box
+    obb = pcd.get_oriented_bounding_box()
+    obb_volume = obb.volume()
+    print(f"Oriented Bounding Box Volume: {obb_volume}")
