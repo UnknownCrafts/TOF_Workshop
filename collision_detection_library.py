@@ -53,8 +53,6 @@ def clustering(pcd, cluster_folder="clusters", logging=False):
     # Convert point cloud to numpy array for processing
     points = np.asarray(pcd.points)
 
-    print(points.shape)
-
     # DBSCAN parameters
     epsilon = cfg_dbscan_epsilon  # Maximum distance between points in the same cluster
     min_points = cfg_dbscan_min_neighbouring_pts  # Minimum number of points to form a cluster
@@ -133,12 +131,8 @@ def distance_calc(pcd1, pcd2):
     return min_distance
 
 def boundbox_size_calc(pcd):
-    # Calculate the axis-aligned bounding box
-    aabb = pcd.get_axis_aligned_bounding_box()
-    aabb_volume = aabb.volume()
-    print(f"Axis-Aligned Bounding Box Volume: {aabb_volume}")
-
     # Calculate the oriented bounding box
     obb = pcd.get_oriented_bounding_box()
     obb_volume = obb.volume()
     print(f"Oriented Bounding Box Volume: {obb_volume}")
+    return obb_volume
