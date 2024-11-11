@@ -7,10 +7,12 @@ import collision_detection_library
 pcd = o3d.io.read_point_cloud("sample-data/touching.pcd")
 
 # Raw data visualization
+print("DISPLAYING RAW DATA")
 o3d.visualization.draw_geometries([pcd])
 
-voxel_size = 2  # Set the voxel size (e.g., 5 mm)
-pcd = pcd.voxel_down_sample(voxel_size=collision_detection_library.cfg_voxel_size)
+voxel_size = collision_detection_library.cfg_voxel_size  # Set the voxel size (e.g., 5 mm)
+print("DISPLAYING VOXEL DOWNSAMPLE")
+pcd = pcd.voxel_down_sample(voxel_size=voxel_size)
 
 # Down sample visualization
 o3d.visualization.draw_geometries([pcd])
@@ -36,4 +38,5 @@ min_neighbors = collision_detection_library.cfg_outlier_removal_min_neighbors
 
 filtered_pcd, ind = filtered_pcd.remove_radius_outlier(nb_points=min_neighbors, radius=radius)
 
+print("DISPLAYING NOISE REDUCED POINT CLOUD")
 o3d.visualization.draw_geometries([filtered_pcd])

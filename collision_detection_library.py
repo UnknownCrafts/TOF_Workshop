@@ -3,14 +3,14 @@ import numpy as np
 import os
 
 # global configuration
-cfg_voxel_size = 2  # voxel downsample
+cfg_voxel_size = 1  # voxel downsample
 cfg_roi_max_distance = 200.0 # mm, remove points further than this
-cfg_outlier_removal_radius = 4 # radius outlier removal
-cfg_outlier_removal_min_neighbors = 20 # radius outlier removal
-cfg_dbscan_epsilon = 3 # dbscan 
-cfg_dbscan_min_neighbouring_pts = 15
+cfg_outlier_removal_radius = 1 # radius outlier removal
+cfg_outlier_removal_min_neighbors = 1 # radius outlier removal
+cfg_dbscan_epsilon = 1 # dbscan 
+cfg_dbscan_min_neighbouring_pts = 1
 
-cfg_bounding_box_size_threshold = 0
+cfg_bounding_box_size_threshold = 1
 
 # returns a filtered pcd after voxel downsampling and 
 def preprocessing(pcd):
