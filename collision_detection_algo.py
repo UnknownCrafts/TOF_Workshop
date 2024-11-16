@@ -6,7 +6,7 @@ import collision_detection_library
 
 # Load or create your point cloud
 # Replace 'your_point_cloud.pcd' with the path to your file or generate point cloud data
-raw_pcd = o3d.io.read_point_cloud("sample-data/3mm-distance.pcd")
+raw_pcd = o3d.io.read_point_cloud("sample-data/touching.pcd")
 
 filtered_pcd = collision_detection_library.preprocessing(raw_pcd)
 
